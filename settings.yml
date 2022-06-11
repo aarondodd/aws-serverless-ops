@@ -1,0 +1,13 @@
+# At some point this should be generic enough to support multiple VPCs
+# and tasks. For demo purposes, we're doing one task of each type and
+# adding iteration (even if only for 1) as we go. As such, the base
+# infra is a single account and single VPC for now, but trying to keep
+# the settings file flexible to avoid too much refactoring later
+global: 
+  target_vpc: &target_vpc vpc-076e905b3e931d519
+  target_vpc_tag: # future use to query for vpc's that contain a tag
+    name: serverless_ops
+    value: true
+
+fargate:
+  vpc: *target_vpc
