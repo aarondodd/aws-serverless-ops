@@ -9,5 +9,11 @@ global:
     name: serverless_ops
     value: true
 
-fargate:
-  vpc: *target_vpc
+# fargate:
+#   vpc: *target_vpc
+
+tasks:
+  fargate:
+    mysql_worker: # the mock backup/restore task
+      name: MySqlWorkerTask
+      image_path: "docker/mysql-worker" # place all docker build files here
