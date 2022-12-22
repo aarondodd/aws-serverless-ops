@@ -55,4 +55,5 @@ ops_tasks = ServerlessOpsTasks(app, "ServerlessOpsTasksStack",
     env=cdk.Environment(account=os.getenv('CDK_DEFAULT_ACCOUNT'), region=os.getenv('CDK_DEFAULT_REGION'))
 )
 
+
 app.synth()

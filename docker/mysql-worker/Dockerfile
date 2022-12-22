@@ -1,15 +1,21 @@
 FROM amazonlinux
 
-# RUN on one line, one layer for all packages
-RUN yum -y update && \
-  yum -y install mysql && \
-  yum -y install python3 && \
-  python3 -m pip install boto3
-
 WORKDIR /root
 
+# RUN on one line, one layer for all packages
+RUN yum -y update && \
+  yum -y install mysql python3 tar curl unzip && \
+  python3 -m pip install boto3
+
+# Install AWSCLIv2
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip" && \
+  unzip /tmp/awscliv2.zip -d /tmp && \
+  /tmp/aws/install && \
+  rm /tmp/awscliv2.zip && \
+  rm -rf /tmp/aws 
+
 # Layer for our scripts
-COPY worker.py .
+COPY worker.py db_backup.sh ./
 
 # Entrypoint for prod
 # call worker.py specifying this is a task from ECS launch 

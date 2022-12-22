@@ -65,13 +65,14 @@ class AwsServerlessOpsStack(Stack):
                 environment = [
                     tasks.TaskEnvironmentVariable(name="TASK_TOKEN_ENV_VARIABLE", value=sf.JsonPath.string_at("$$.Task.Token")),
                     tasks.TaskEnvironmentVariable(name="JOB_NAME", value=sf.JsonPath.string_at("$.job_name")),
+                    tasks.TaskEnvironmentVariable(name="DB_ENV", value=sf.JsonPath.string_at("$.job_options.db_name")),
                     tasks.TaskEnvironmentVariable(name="DB_NAME", value=sf.JsonPath.string_at("$.job_options.db_name")),
-                    tasks.TaskEnvironmentVariable(name="DB_HOST", value=sf.JsonPath.string_at("$.job_options.db_host")),
-                    tasks.TaskEnvironmentVariable(name="DB_PORT", value=sf.JsonPath.string_at("$.job_options.db_port")),
-                    tasks.TaskEnvironmentVariable(name="DB_USER", value=sf.JsonPath.string_at("$.job_options.db_user")),
-                    tasks.TaskEnvironmentVariable(name="DB_PASS", value=sf.JsonPath.string_at("$.job_options.db_pass")),
-                    tasks.TaskEnvironmentVariable(name="S3_BUCKET", value=sf.JsonPath.string_at("$.job_options.s3_bucket")),
-                    tasks.TaskEnvironmentVariable(name="S3_PATH", value=sf.JsonPath.string_at("$.job_options.s3_path")),
+                    # tasks.TaskEnvironmentVariable(name="DB_HOST", value=sf.JsonPath.string_at("$.job_options.db_host")),
+                    # tasks.TaskEnvironmentVariable(name="DB_PORT", value=sf.JsonPath.string_at("$.job_options.db_port")),
+                    # tasks.TaskEnvironmentVariable(name="DB_USER", value=sf.JsonPath.string_at("$.job_options.db_user")),
+                    # tasks.TaskEnvironmentVariable(name="DB_PASS", value=sf.JsonPath.string_at("$.job_options.db_pass")),
+                    # tasks.TaskEnvironmentVariable(name="S3_BUCKET", value=sf.JsonPath.string_at("$.job_options.s3_bucket")),
+                    # tasks.TaskEnvironmentVariable(name="S3_PATH", value=sf.JsonPath.string_at("$.job_options.s3_path")),
                 ]
             )]
         )

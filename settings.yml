@@ -5,15 +5,44 @@
 # the settings file flexible to avoid too much refactoring later
 global: 
   target_vpc: &target_vpc vpc-076e905b3e931d519
-  target_vpc_tag: # future use to query for vpc's that contain a tag
-    name: serverless_ops
-    value: true
+  # target_vpc_tag: # future use to query for vpc's that contain a tag
+  #   name: serverless_ops
+  #   value: true
 
-# fargate:
-#   vpc: *target_vpc
+fargate:
+  vpc: *target_vpc
 
 tasks:
   fargate:
-    mysql_worker: # the mock backup/restore task
+    mysql_worker: # the backup/restore task
       name: MySqlWorkerTask
       image_path: "docker/mysql-worker" # place all docker build files here
+
+# For production I would NOT store user/pass info in a yml file like this. It is helpful for
+# demo purposes as I'm creating Parameter Store values to aid in the walkthrough. 
+# See "serverless_ops_tasks.py" for where this is used and thoughts on adjusting.
+
+# parameters: Top level path
+#   databases: section for tasks that need db-related info
+#     db_name: db name (the database within RDS)
+#       env_name: the environment, combined with the db_name this is the unique db combo used for task lookups
+parameters:  # The values for tasks to pull from ParameterStore instead of feeding in directly
+  databases:
+    classicmodels: # key heading, demo code will look for heading/env
+      demo:   # calling this demo environment "demo", could be dev, prod, etc.
+        db_host: "serverlessops1.cluster-czpi934xq9hf.us-east-1.rds.amazonaws.com"
+        db_port: "3306"
+        db_name: "classicmodels"
+        db_user: "admin"
+        db_pass: "Password01"
+        s3_bucket: "aws-acd-serverlessops-backups"
+        s3_path: "parameterstoretests"
+  database_users:
+    classicmodels: # key heading, demo code will look for heading/env
+      demo: # calling this demo env "demo", could be dev, prod, etc.
+        mary: # user name
+          password: "Password02"
+          grant: "GRANT ALL PRIVILEGES TO 'mary'@'%';" # Yes, there are much better ways to do this whole section :)
+        frank:
+          password: "Password03"
+          grant: "GRANT ALL PRIVILEGES TO 'frank'@'%';"

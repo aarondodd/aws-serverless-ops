@@ -6,6 +6,7 @@ from aws_cdk import (
     aws_logs as logs,
     aws_stepfunctions as sf,
     aws_stepfunctions_tasks as tasks,
+    aws_ssm as ssm,
     aws_apigateway as api_gw
 )
 from constructs import Construct
@@ -40,9 +41,18 @@ class MySqlWorker(NestedStack):
         )
 
         # assign the docker image to the Fargate task
+        # For more logging info, see https://docs.aws.amazon.com/cdk/api/v2/python/aws_cdk.aws_ecs/LogDriver.html#aws_cdk.aws_ecs.LogDriver
+        # specifically, if you need to change the loggroup or prefix
         fargate_task_container = fargate_task.add_container("MysqlWorkerContainer",
-            image=ecs.ContainerImage.from_docker_image_asset(docker_image)
+            image = ecs.ContainerImage.from_docker_image_asset(docker_image),
+            logging = ecs.LogDrivers.aws_logs(
+                stream_prefix = "serverlessops-task-mysql"
+            )
         )
+
+        # Ensure fargate task can talk to Parameter Store by exposing the task execution role to be used when creating the parameters
+        self.task_role = fargate_task.task_role
+        self.execution_role = fargate_task.execution_role
 
         # Create the StepFunction task
         # The "environment" block is where container envvars are passed in. 
@@ -94,7 +104,7 @@ class MySqlWorker(NestedStack):
         )
 
         # Create the logging group
-        sf_logs = logs.LogGroup(self, "MySqlWorkerLogs")
+        sf_logs = logs.LogGroup(self, "/serverlessops/MySqlWorkerLogs")
 
         # Create StepFunction
         sf_statemachine = sf.StateMachine(self, "MySqlWorkerStateMachine",
