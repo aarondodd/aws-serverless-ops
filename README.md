@@ -7,8 +7,10 @@
 > - Cloudwatch Logs go to various logstreams, need to adjust CDK to be more organized
 > - Need CDK to output all the settings the user will need (ECS Cluster ID, etc)
 > - Prior example fed all parameters into each request, refactored to use ParameterStore, need to clean up the steps listed
-> - LambdaFunction to show changing MySQL password not coded yet
+> - LambdaFunction to show adding a user to MySQL [has been code](lambda/mysql-users/app.py) but not integrated into CDK and demo workflow yet
 > - SSM RunDocument to show API-GW fronting an existing automation not yet coded
+> - Values like passwords should be encrypted in Parameter Store and when passed between StepFunction steps, but not yet implemented.
+> - Common steps, like Parameter Store lookups, could be a dedicated function called by StepFunction before invoking Lambda or Fargate, but not yet refactored that way 
 
 ## What the heck is this?
 
