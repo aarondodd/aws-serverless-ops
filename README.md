@@ -7,7 +7,7 @@
 > - Cloudwatch Logs go to various logstreams, need to adjust CDK to be more organized
 > - Need CDK to output all the settings the user will need (ECS Cluster ID, etc)
 > - Prior example fed all parameters into each request, refactored to use ParameterStore, need to clean up the steps listed
-> - LambdaFunction to show adding a user to MySQL [has been code](lambda/mysql-users/app.py) but not integrated into CDK and demo workflow yet
+> - LambdaFunction to show adding a user to MySQL [has been coded](lambda/mysql-users/app.py) but not integrated into CDK and demo workflow yet
 > - SSM RunDocument to show API-GW fronting an existing automation not yet coded
 > - Values like passwords should be encrypted in Parameter Store and when passed between StepFunction steps, but not yet implemented.
 > - Common steps, like Parameter Store lookups, could be a dedicated function called by StepFunction before invoking Lambda or Fargate, but not yet refactored that way 
@@ -19,10 +19,10 @@ This is an example design and sample code for running operational tasks in using
 Deploying this CDK project will create:
 1. An ECS cluster configured for Fargate use
 2. An ECS/Fargate task that can take a MySQL backup from an RDS instance and store it on an S3 bucket
-3. [PENDING] A Lambda Function that can change the password for a user on a MySQL instance 
+3. [PARTIALLY DONE] A Lambda Function that can change the password for a user on a MySQL instance 
 4. A StepFunction that orchestrates the ECS/Fargate task
-5. [PENDING] A StepFunction that orchestrates the Lambda Function
-6. An API Gateway that can trigger the StepFunctions
+5. [PENDING] orchestrate the Lambda Function via StepFunction
+6. An API Gateway that can trigger the StepFunction
 
 ## But, why?
 
