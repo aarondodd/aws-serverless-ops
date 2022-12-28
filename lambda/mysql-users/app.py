@@ -4,7 +4,6 @@ import boto3
 import json
 import sys
 import logging
-#import rds_config
 import pymysql
 
 
@@ -53,6 +52,18 @@ Recommended enhancements
   would 1/ reduce the complexity of this Lambda Function, 2/ allow for more granular
   IAM permissions (the MySQL function shouldn't have more rights than needed), 3/
   offload error handling more to the StepFunction.
+
+This Lambda function is a modification of
+- https://docs.aws.amazon.com/lambda/latest/dg/services-rds-tutorial.html
+Be sure to properly package the zip file for deployment. Zip must contain
+"app.py" and the content of the "packages" folder at the root
+- save pymsql with the function:
+  - cd myfunctionfolder (where app.py lives)
+  - pip3 install --target ./package pymysql
+  - cd package
+  - zip -r ../lambdapackage.zip .
+  - cd ..
+  - zip lambdapackage.zip app.py
 """
 
 aws_session_token = os.environ.get('AWS_SESSION_TOKEN')
@@ -75,11 +86,6 @@ def get_parameter(keyname):
         logger.error("ERROR: Unexpected error: Could not retrieve Parameter Store value " + keypath)
         logger.error(e)
         sys.exit()
-
-
-# This Lambda function is a modification of
-# - https://docs.aws.amazon.com/lambda/latest/dg/services-rds-tutorial.html
-
 
 def handler(event, context):
     logger.info("Lambda handler function invoked")
