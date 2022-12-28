@@ -75,7 +75,13 @@ logger.setLevel(logging.INFO)
 logger.info("Function initializing.")
 
 def get_parameter(keyname):
-    """Get a value from Parameter Store"""
+    """
+    Get a value from Parameter Store
+
+    keyname, string = /full/path/to/key
+
+    Response: value received querying keyname
+    """
     logger.info("Asked to get the value of " + keyname) # Potentially remove this, as the keynames will be saved in Cloudwatch Logs
     ssm = boto3.client('ssm')
     try:
@@ -88,8 +94,10 @@ def get_parameter(keyname):
         sys.exit()
 
 def handler(event, context):
+    """
+    Main handler, entry point for Lambda Function
+    """
     logger.info("Lambda handler function invoked")
-    
     
     # From below, the handler will build /serverlessops/databases/... path to keys
     logger.info("Setting variables.")
@@ -143,7 +151,6 @@ def handler(event, context):
         logger.error(e)
         sys.exit()
     
-
     try:
         with conn.cursor() as cur:
             cur.execute(add_user_string)
@@ -155,10 +162,5 @@ def handler(event, context):
         logger.error("ERROR: Unexpected error: Query failed.")
         logger.error(e)
         sys.exit()
-
-    for row in cur:
-        print(f"Added row {row}")
-        logger.info("Added row: " + row)
-
 
     return "Added user " + update_user + " to database " + db_name + " on host " + db_host
