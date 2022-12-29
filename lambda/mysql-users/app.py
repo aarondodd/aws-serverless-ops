@@ -11,6 +11,11 @@ import pymysql
 Example Lambda Function for issuing a MySql query. The example call creates a user
 with all privileges.
 
+Note: this is just to show how Lambda Functions can interact with RDS. For a recommended
+user-management workflow, please see better approaches:
+- [Multi-user secrets rotation for Amazon RDS](https://aws.amazon.com/blogs/database/multi-user-secrets-rotation-for-amazon-rds/)
+- [Rotate Amazon RDS database credentials automatically with AWS Secrets Manager](https://aws.amazon.com/blogs/security/rotate-amazon-rds-database-credentials-automatically-with-aws-secrets-manager/)
+
 Requires:
 - VPC connectivity (to subnets with routing to the DB instance)
 - Parameter Store entries (see/adjust below for assumed path)
