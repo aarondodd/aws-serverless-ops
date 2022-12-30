@@ -6,6 +6,7 @@ from constructs import Construct
 
 # For each task, create a NestedStack in the tasks subfolder and import here
 from aws_serverless_ops.tasks.task_ecs_mysqlworker import MySqlWorker
+from aws_serverless_ops.tasks.task_lambda_mysql_user import MySqlUsersLambda
 
 class ServerlessOpsTasks(Stack):
 
@@ -25,6 +26,14 @@ class ServerlessOpsTasks(Stack):
             ops_api = ops_apigateway,
             docker_path = settings['tasks']['fargate']['mysql_worker']['image_path'],
             #ssm_keybase = "/serverlessops/databases"
+        )
+
+        # Create the mysql user lambda (add new user)
+        task_mysqluser = MySqlUsersLambda(self, settings['tasks']['lambda']['mysql_users']['name'],
+            asset_path = settings['tasks']['lambda']['mysql_users']['asset_path'],
+            function_code = settings['tasks']['lambda']['mysql_users']['function_code'],
+            entry_point = settings['tasks']['lambda']['mysql_users']['entry_point'],
+            target_vpc = settings['global']['target_vpc']
         )
         
         # Create Parameter Store values for demo entries in the settings.yml
@@ -52,3 +61,4 @@ class ServerlessOpsTasks(Stack):
                     # Add task rights to use this parameter
                     # param.grant_read(task_mysqlworker.execution_role)
                     param.grant_read(task_mysqlworker.task_role)
+                    param.grant_read(task_mysqluser.role)

@@ -60,8 +60,9 @@ Recommended enhancements
 
 This Lambda function is a modification of
 - https://docs.aws.amazon.com/lambda/latest/dg/services-rds-tutorial.html
-Be sure to properly package the zip file for deployment. Zip must contain
-"app.py" and the content of the "packages" folder at the root
+If deploying this manually and not via this larger CDK demo, then be sure to properly 
+package the zip file for deployment. Zip must contain "app.py" and the content of the 
+"packages" folder at the root
 - save pymsql with the function:
   - cd myfunctionfolder (where app.py lives)
   - pip3 install --target ./package pymysql
@@ -69,6 +70,7 @@ Be sure to properly package the zip file for deployment. Zip must contain
   - zip -r ../lambdapackage.zip .
   - cd ..
   - zip lambdapackage.zip app.py
+If deploying via the CDK, do nothing. CDK will package for you.
 """
 
 aws_session_token = os.environ.get('AWS_SESSION_TOKEN')

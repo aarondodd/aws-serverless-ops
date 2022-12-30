@@ -17,6 +17,12 @@ tasks:
     mysql_worker: # the backup/restore task
       name: MySqlWorkerTask
       image_path: "docker/mysql-worker" # place all docker build files here
+  lambda:
+    mysql_users:
+      name: MySqlUsersLambda
+      asset_path: "lambda/mysql-users"
+      function_code: "app.py"
+      entry_point: "handler"
 
 # For production I would NOT store user/pass info in a yml file like this. It is helpful for
 # demo purposes as I'm creating Parameter Store values to aid in the walkthrough. 
@@ -37,12 +43,3 @@ parameters:  # The values for tasks to pull from ParameterStore instead of feedi
         db_pass: "Password01"
         s3_bucket: "aws-acd-serverlessops-backups"
         s3_path: "parameterstoretests"
-  database_users:
-    classicmodels: # key heading, demo code will look for heading/env
-      demo: # calling this demo env "demo", could be dev, prod, etc.
-        mary: # user name
-          password: "Password02"
-          grant: "GRANT ALL PRIVILEGES TO 'mary'@'%';" # Yes, there are much better ways to do this whole section :)
-        frank:
-          password: "Password03"
-          grant: "GRANT ALL PRIVILEGES TO 'frank'@'%';"

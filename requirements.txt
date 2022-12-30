@@ -1,3 +1,4 @@
-aws-cdk-lib==2.1.0
-constructs>=10.0.0,<11.0.0
-pyyaml>=6.0.0
+aws-cdk-lib
+constructs
+pyyaml
+aws-cdk.aws-lambda-python-alpha
