@@ -68,7 +68,7 @@ Semi-optional to use in this demo, but highly recommended to explore. Some examp
 A serverless, event-driven compute service. You can create discrete functions and tie them together, paying for only the execution time of that function (plus storage costs).
 
 Use-case(s) here:
-- Tasks that run quickly and  don't require a lot of local storage, such as changing a user password in a database
+- For quick-running tasks (under 15 minutes) with minimal local storage requirements
 
 If the type of task you wish to run can be contained within a Lambda Function, it may be the most cost-effective service to leverage. However, almost anything you can run in a Lambda Function can also be run on ECS/Fargate (below), especially with Lambda's [containers support](https://aws.amazon.com/about-aws/whats-new/2020/12/aws-lambda-now-supports-container-images-as-a-packaging-format/).
 
@@ -100,13 +100,6 @@ Use-case(s) here:
 
 Optional part of this demo, but highly recommended to explore. The tasks and related services of this demo will leverage CloudWatch regardless. If you ever need to debug what's going on, CloudWatch Logs is where you'll find the output.
 
-**AWS Lambda Functions**
-[PENDING / TBD] [AWS Lambda](https://aws.amazon.com/lambda/) is a serverless, event-driven compute service that lets you run code for virtually any type of application or backend service without provisioning or managing servers
-
-Use-case(s) here:
-- For quick-running tasks (under 15 minutes) with minimal local storage requirements
-
-Required. This is a core part of the demo (example function TBD).
 
 **AWS Systems Manager Parameter Store**
 A secure, hierarchical storage for configuration data management and secrets management. Using Parameter Store decouples job configuration from job definition, allowing you to centrally and securely manage things like usernames, host names, etc.
