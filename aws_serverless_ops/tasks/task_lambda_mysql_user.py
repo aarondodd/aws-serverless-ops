@@ -35,6 +35,19 @@ class MySqlUsersLambda(NestedStack):
         Be sure to include any python packages in the lambda/mysql-users/requirements.txt if
         you edit the Python file there to use any other dependencies.
 
+        To avoid using an alpa module, until it graduates to stable, the options with the current
+        stable module are:
+        1. Use the "bundle" options to create the Function as a container image (Lambda supports 
+           container-based deployments).
+        2. Package the function code yourself into a zip file, and rely on CDK to deploy
+           the zip package (this works fine, but I wanted CDK to handle the entire process).
+        3. Use the ["bundling"](https://aws.amazon.com/blogs/devops/building-apps-with-aws-cdk/)
+           method where CDK will use Docker to install dependencies and build the zipfile. This
+           works fine, I just wasn't keen on hardcoding the "pip" call and *nix-specific commands
+           (some folks do use Windows...) and I wanted to try the forthcoming updates.
+
+        See an example below this section for a non-alpha method.
+
         Note: `vpc` is required in this section for Lambda to access RDS, but you only need
         to specify `vpc_subnets` if you want to specifically target where the Lambda ENIs are
         created. By default, CDK uses best-practice values, and omitting `vpc_subnets` defaults
@@ -48,6 +61,24 @@ class MySqlUsersLambda(NestedStack):
             vpc = ops_vpc,
             timeout = Duration.minutes(5)
         )
+
+        # Non-alpha method:
+        # aws_lambda.Function(
+        #     self,
+        #     "Function",
+        #     runtime=aws_lambda.Runtime.PYTHON_3_9,
+        #     handler="index.handler",
+        #     code=aws_lambda.Code.from_asset(
+        #         "function_source_dir",
+        #         bundling=core.BundlingOptions(
+        #             image=aws_lambda.Runtime.PYTHON_3_9.bundling_image,
+        #             command=[
+        #                 "bash", "-c",
+        #                 "pip install --no-cache -r requirements.txt -t /asset-output && cp -au . /asset-output"
+        #             ],
+        #         ),
+        #     ),
+        # )
 
         # Ensure we can assign ParameterStore rights by exposing the role
         self.role = mysql_user_lambda.role
