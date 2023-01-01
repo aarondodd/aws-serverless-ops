@@ -43,8 +43,8 @@ class MySqlUsersLambda(NestedStack):
            the zip package (this works fine, but I wanted CDK to handle the entire process).
         3. Use the ["bundling"](https://aws.amazon.com/blogs/devops/building-apps-with-aws-cdk/)
            method where CDK will use Docker to install dependencies and build the zipfile. This
-           works fine, I just wasn't keen on hardcoding the "pip" call and *nix-specific commands
-           (some folks do use Windows...) and I wanted to try the forthcoming updates.
+           works fine, I just wasn't keen on hardcoding the pip/zip/etc commands and I wanted to try 
+           the forthcoming updates.
 
         See an example below this section for a non-alpha method.
 
