@@ -34,6 +34,21 @@ Usage:
       "update_pass": "somepassword"
     }
 
+  Note: If you'd prefer to not use Parameter Store, check the code in-line for comments
+  what to adjust, the test object for passing all value in would be:
+
+    {
+      "db_name": "yourdbname",
+      "db_env": "yourdbenv",
+      "db_host": "rds.domain.name",
+      "db_port": "3306",
+      "db_user": "db_admin_user",
+      "db_pass": "db_admin_pass",
+      "update_user": "someusername",
+      "update_pass": "somepassword"
+    }
+
+
 Deviations from best practices:
 On Purpose:
 - The PyMySQL connection should usually be outside the handler function so that 
@@ -96,7 +111,7 @@ def get_parameter(keyname):
         # logger.info("Got back value " + response['Parameter']['Value']) # Uncomment only for debugging
         return response['Parameter']['Value']
     except Exception as e:
-        logger.error("ERROR: Unexpected error: Could not retrieve Parameter Store value " + keypath)
+        logger.error("ERROR: Unexpected error: Could not retrieve Parameter Store value " + keyname)
         logger.error(e)
         sys.exit()
 
@@ -127,6 +142,7 @@ def handler(event, context):
         sys.exit()
     
     # Build the parameter store paths for the DB server info needed
+    # If you'd like to avoid using Parameter Store, comment out this section and uncomment the subsequent one
     logger.info("Building the Parameter Store paths")
     paramstore_base_path = "/serverlessops/databases"
     paramstore_path = paramstore_base_path + "/" + db_name + "/" + db_env
@@ -136,12 +152,19 @@ def handler(event, context):
     paramstore_db_pass = paramstore_path + "/db_pass"
     
     # Get the parameters
+    # If you'd like to avoid using Parameter Store, comment out this section and uncomment the subsequent one
     logger.info("Calling the get_parameter function to retrieve values from Parameter Store")
     db_host = get_parameter(paramstore_db_host)
     db_port = get_parameter(paramstore_db_port)
     db_user = get_parameter(paramstore_db_user)
     db_pass = get_parameter(paramstore_db_pass)
 
+    # If you'd like to avoid using Parameter Store, uncomment below (and comment out the above)
+    # db_host = event['db_host']
+    # db_port = event['db_port']
+    # db_user = event['db_user']
+    # db_pass = event['db_pass']
+    
     # New user query string
     add_user_string = "CREATE USER '" + update_user + "'@'%' IDENTIFIED BY '" + update_pass + "';"
     grant_user_string = "GRANT ALL PRIVILEGES ON " + db_name + ".* TO '" + update_user + "'@'%';"
